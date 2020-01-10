@@ -37,7 +37,8 @@ create table gtfs_agency (
   -- unofficial features
   ,
   agency_phone text,
-  fare_url text
+  fare_url text,
+  agency_fare_url text
 );
 
 --unoffical table, related to gtfs_stops(location_type)
@@ -76,6 +77,9 @@ create table gtfs_stops (
   location_type int, --FOREIGN KEY REFERENCES gtfs_location_types(location_type)
   parent_station text, --FOREIGN KEY REFERENCES gtfs_stops(stop_id)
   stop_timezone text,
+
+  wheelchair_boarding int,
+
   FOREIGN KEY (location_type) REFERENCES gtfs_location_types(location_type),
   FOREIGN KEY (parent_station) REFERENCES gtfs_stops(stop_id)
 );
@@ -220,6 +224,9 @@ create table gtfs_trips (
   shape_id text,
   -- unofficial features  
   trip_short_name text,
+  wheelchair_accessible int,
+  note_fr text,
+  note_en text,
   FOREIGN KEY (route_id) REFERENCES gtfs_routes(route_id),
   FOREIGN KEY (direction_id) REFERENCES gtfs_directions(direction_id)
 );
@@ -312,9 +319,12 @@ create table gtfs_feed_info (
   feed_publisher_url text,
   feed_timezone text,
   feed_lang text,
-  feed_version text
+  feed_version text,
+  feed_start_date date,
+  feed_end_date date
 );
 
 
+create index idx_gtfs_trips_trip_headsign on gtfs_trips(trip_headsign);
 
 commit;
